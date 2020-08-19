@@ -29,8 +29,6 @@ public class SysLoginController extends BaseController
         // 如果是Ajax请求，返回Json字符串。
         if (ServletUtils.isAjaxRequest(request))
         {
-            System.out.println();
-
             return ServletUtils.renderString(response, "{\"code\":\"1\",\"msg\":\"未登录或登录超时。请重新登录\"}");
         }
 
