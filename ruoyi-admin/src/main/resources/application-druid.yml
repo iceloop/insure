@@ -7,7 +7,7 @@ spring:
             # 主库数据源
             master:
                 url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
-                username: insure
+                username: ry
                 password: 123456
             # 从库数据源
             slave:

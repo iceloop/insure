@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TProductManagementMapper">
+    
+    <resultMap type="TProductManagement" id="TProductManagementResult">
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="insurance"    column="insurance"    />
+        <result property="type"    column="type"    />
+        <result property="state"    column="state"    />
+        <result property="grade"    column="grade"    />
+    </resultMap>
+
+    <sql id="selectTProductManagementVo">
+        select product_id, product_name, insurance, type, state, grade from t_product_management
+    </sql>
+
+    <select id="selectTProductManagementList" parameterType="TProductManagement" resultMap="TProductManagementResult">
+        <include refid="selectTProductManagementVo"/>
+        <where>  
+            <if test="productName != null  and productName != ''"> and product_name like concat(concat('%', #{productName}), '%')</if>
+            <if test="insurance != null  and insurance != ''"> and insurance = #{insurance}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProductManagementById" parameterType="String" resultMap="TProductManagementResult">
+        <include refid="selectTProductManagementVo"/>
+        where product_id = #{productId}
+    </select>
+        
+    <insert id="insertTProductManagement" parameterType="TProductManagement">
+        <selectKey keyProperty="productId" resultType="long" order="BEFORE">
+            SELECT seq_t_product_management.NEXTVAL as productId FROM DUAL
+        </selectKey>
+        insert into t_product_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="insurance != null">insurance,</if>
+            <if test="type != null">type,</if>
+            <if test="state != null">state,</if>
+            <if test="grade != null">grade,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="insurance != null">#{insurance},</if>
+            <if test="type != null">#{type},</if>
+            <if test="state != null">#{state},</if>
+            <if test="grade != null">#{grade},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProductManagement" parameterType="TProductManagement">
+        update t_product_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="insurance != null">insurance = #{insurance},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="grade != null">grade = #{grade},</if>
+        </trim>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteTProductManagementById" parameterType="String">
+        delete from t_product_management where product_id = #{productId}
+    </delete>
+
+    <delete id="deleteTProductManagementByIds" parameterType="String">
+        delete from t_product_management where product_id in 
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+</mapper>
