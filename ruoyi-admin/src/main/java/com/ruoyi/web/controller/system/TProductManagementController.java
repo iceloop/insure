@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +22,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 产品管理Controller
- * 
+ *
  * @author ruoyi
  * @date 2020-08-19
  */
 @Controller
 @RequestMapping("/system/management")
-public class TProductManagementController extends BaseController
-{
+public class TProductManagementController extends BaseController {
     private String prefix = "system/management";
 
     @Autowired
@@ -36,8 +36,7 @@ public class TProductManagementController extends BaseController
 
     @RequiresPermissions("system:management:view")
     @GetMapping()
-    public String management()
-    {
+    public String management() {
         return prefix + "/management";
     }
 
@@ -47,8 +46,7 @@ public class TProductManagementController extends BaseController
     @RequiresPermissions("system:management:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(TProductManagement tProductManagement)
-    {
+    public TableDataInfo list(TProductManagement tProductManagement) {
         startPage();
         List<TProductManagement> list = tProductManagementService.selectTProductManagementList(tProductManagement);
         return getDataTable(list);
@@ -61,8 +59,7 @@ public class TProductManagementController extends BaseController
     @Log(title = "产品管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(TProductManagement tProductManagement)
-    {
+    public AjaxResult export(TProductManagement tProductManagement) {
         List<TProductManagement> list = tProductManagementService.selectTProductManagementList(tProductManagement);
         ExcelUtil<TProductManagement> util = new ExcelUtil<TProductManagement>(TProductManagement.class);
         return util.exportExcel(list, "management");
@@ -72,9 +69,17 @@ public class TProductManagementController extends BaseController
      * 新增产品管理
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
+    }
+
+    /**
+     * 产品上传
+     */
+    @RequiresPermissions("system:management:upload")
+    @GetMapping("/upload")
+    public String upload() {
+        return prefix + "/Productupload";
     }
 
     /**
@@ -84,8 +89,7 @@ public class TProductManagementController extends BaseController
     @Log(title = "产品管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(TProductManagement tProductManagement)
-    {
+    public AjaxResult addSave(TProductManagement tProductManagement) {
         return toAjax(tProductManagementService.insertTProductManagement(tProductManagement));
     }
 
@@ -93,8 +97,7 @@ public class TProductManagementController extends BaseController
      * 修改产品管理
      */
     @GetMapping("/edit/{productId}")
-    public String edit(@PathVariable("productId") String productId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("productId") String productId, ModelMap mmap) {
         TProductManagement tProductManagement = tProductManagementService.selectTProductManagementById(productId);
         mmap.put("tProductManagement", tProductManagement);
         return prefix + "/edit";
@@ -107,8 +110,7 @@ public class TProductManagementController extends BaseController
     @Log(title = "产品管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(TProductManagement tProductManagement)
-    {
+    public AjaxResult editSave(TProductManagement tProductManagement) {
         return toAjax(tProductManagementService.updateTProductManagement(tProductManagement));
     }
 
@@ -117,10 +119,9 @@ public class TProductManagementController extends BaseController
      */
     @RequiresPermissions("system:management:remove")
     @Log(title = "产品管理", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(tProductManagementService.deleteTProductManagementByIds(ids));
     }
 }
