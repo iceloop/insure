@@ -34,9 +34,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insertTProductManagement" parameterType="TProductManagement">
-        <selectKey keyProperty="productId" resultType="long" order="BEFORE">
+<!--        <selectKey keyProperty="productId" resultType="long" order="BEFORE">
             SELECT seq_t_product_management.NEXTVAL as productId FROM DUAL
-        </selectKey>
+        </selectKey>-->
         insert into t_product_management
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productId != null">product_id,</if>
